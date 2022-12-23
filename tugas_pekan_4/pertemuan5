@@ -1,0 +1,116 @@
+# import image module
+from IPython.display import Image
+  
+# get the image
+Image(url="mobile.png", width=1000, height=500)
+
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+df=pd.read_csv('mobile.csv')
+pd.set_option('display.max_rows', 500)
+pd.set_option('display.max_columns', 500)
+pd.set_option('display.width', 1000)
+df
+df.columns
+
+#data cleaning
+df.info()
+df.price_class.value_counts()
+df.isna().sum()
+
+#EDA
+#table
+df.describe()
+df[df.price_class==1]
+df[df.price_class==1].describe()
+
+#visualisasi data
+#categorik(target) vs numerik
+sns.boxplot(x="price_class",y="ram",data=df)
+sns.boxplot(x="price_class",y="battery_power",data=df)
+sns.boxplot(x="price_class",y="clock_speed",data=df)
+sns.boxplot(x="price_class",y="fc",data=df)
+`
+#categorik(target) vs categoric
+sns.countplot(x="three_g",hue="price_class",data=df)
+sns.countplot(x="wifi",hue="price_class",data=df)
+sns.countplot(x="touch_screen",hue="price_class",data=df)
+sns.countplot(x="four_g",hue="price_class",data=df)
+
+
+plt.figure(figsize=(25,25))
+sns.heatmap(df.corr(),annot=True)
+
+#Kesimpulan:
+#battery power,3g,ram, px height, px width,wifi -> price_class  (Fitur) --> ciri ciri.
+
+#reduksi
+df.columns
+df_reduksi=pd.DataFrame([])
+df_reduksi['battery_power']=df['battery_power']
+df_reduksi['three_g']=df['three_g']
+df_reduksi['ram']=df['ram']
+df_reduksi['px_height']=df['px_height']
+df_reduksi['px_width']=df['px_width']
+df_reduksi['wifi']=df['wifi']
+
+df_reduksi['price_class']=df['price_class']
+df_reduksi
+
+#dataset splitting
+
+from sklearn.model_selection import train_test_split
+df_reduksi
+X=df_reduksi.drop(columns="price_class")
+y=df_reduksi.price_class
+X_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.2,stratify=y,random_state=42)
+X_train.shape,X_test.shape,y_train.shape,y_test.shape
+
+from sklearn.neighbors import KNeighborsClassifier
+knn=KNeighborsClassifier()
+knn.fit(X_train,y_train)
+print(knn.score(X_train,y_train))
+print(knn.score(X_test,y_test))
+df_reduksi.columns
+
+#test
+soal_test_random=pd.DataFrame({"battery_power":[1800],
+                   "three_g":[1],
+                   "ram":[1000],
+                   "px_height":[1000],
+                   "px_width":[700],
+                   "wifi":[1],        
+}
+)
+
+soal_test_random
+prediksi=knn.predict(soal_test_random)
+print(prediksi)
+
+#cross Validation
+from sklearn.model_selection import cross_val_score
+knn=KNeighborsClassifier()
+cross_val_score(knn,X_train,y_train,cv=4)
+cross_val_score(knn,X_train,y_train,cv=5)
+cross_val_score(knn,X_train,y_train,cv=6)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,176 @@
+import matplotlib.pyplot as plt
+
+#basic Chart
+plt.bar(['a','b','c'],[1,2,3])
+
+#import data
+import pandas as pd
+df=pd.read_csv("cereal.csv")
+df
+
+#bar chart
+df_bar=df.groupby('mfr').count()['name'].reset_index()
+df_bar
+plt.bar(df_bar['mfr'],df_bar['name'])
+
+#size and color
+plt.figure(figsize=(5,5))
+plt.bar(df_bar['mfr'],df_bar['name'],color='#444444')
+
+
+#value
+plt.figure(figsize=(5,5))
+mark_bar=plt.bar(df_bar['mfr'],df_bar['name'],color='#444444')
+plt.bar_label(mark_bar)
+
+
+#title, xlabel, ylabel
+plt.figure(figsize=(5,5))
+plt.title("Jumlah Cereal pada Supermarket berdasarkan Pabrik")
+plt.xlabel("Pabrik")
+plt.ylabel("Jumlah Cereal")
+mark_bar=plt.bar(df_bar['mfr'],df_bar['name'],color='#444444')
+plt.bar_label(mark_bar)
+
+#Horizontal Bar Chart
+plt.figure(figsize=(5,5))
+plt.title("Jumlah Cereal pada Supermarket berdasarkan Pabrik")
+plt.xlabel("jumlah Cereal")
+plt.ylabel("Pabrik")
+mark_bar=plt.barh(df_bar['mfr'],df_bar['name'],color='#444444')
+plt.bar_label(mark_bar)
+
+#Highlight
+x_high=[]
+x_small=[]
+y_high=[]
+y_small=[]
+
+for y,x in zip(df_bar['name'],df_bar['mfr']):
+    #print(y)
+#     print(x)
+    if(y>20):
+        x_high.append(x)
+        y_high.append(y)
+    else:
+        x_small.append(x)
+        y_small.append(y)
+        
+
+plt.figure(figsize=(5,5))
+plt.title("Jumlah Cereal pada Supermarket berdasarkan Pabrik")
+plt.xlabel("Pabrik")
+plt.ylabel("Jumlah Cereal")
+bar_small=plt.bar(x_small,y_small,color='#444444')
+bar_high=plt.bar(x_high,y_high,color='#B2B2B2')
+plt.bar_label(bar_small)
+plt.bar_label(bar_high)
+
+#ngurutin
+df_bar_urut=df_bar.sort_values("name",ascending=False)
+df_bar_urut
+plt.figure(figsize=(5,5))
+plt.title("Jumlah Cereal pada Supermarket berdasarkan Pabrik")
+plt.xlabel("Pabrik")
+plt.ylabel("Jumlah Cereal")
+mark_bar=plt.bar(df_bar_urut['mfr'],df_bar_urut['name'],color='#444444')
+plt.bar_label(mark_bar)
+
+#highlight+vertikal
+x_high=[]
+x_small=[]
+y_high=[]
+y_small=[]
+
+for y,x in zip(df_bar_urut['name'],df_bar_urut['mfr']):
+    #print(y)
+#     print(x)
+    if(y>20):
+        x_high.append(x)
+        y_high.append(y)
+    else:
+        x_small.append(x)
+        y_small.append(y)
+        
+
+plt.figure(figsize=(5,5))
+plt.title("Jumlah Cereal pada Supermarket berdasarkan Pabrik")
+plt.xlabel("Pabrik")
+plt.ylabel("Jumlah Cereal")
+bar_high=plt.bar(x_high,y_high,color='#B2B2B2')
+bar_small=plt.bar(x_small,y_small,color='#444444')
+plt.bar_label(bar_small)
+plt.bar_label(bar_high)
+
+#highlight+horizontal
+df_bar_urut_horizontal=df_bar.sort_values("name",ascending=True)
+df_bar_urut_horizontal
+x_high=[]
+x_small=[]
+y_high=[]
+y_small=[]
+
+for y,x in zip(df_bar_urut_horizontal['name'],df_bar_urut_horizontal['mfr']):
+    #print(y)
+#     print(x)
+    if(y>20):
+        x_high.append(x)
+        y_high.append(y)
+    else:
+        x_small.append(x)
+        y_small.append(y)
+        
+
+plt.figure(figsize=(5,5))
+plt.title("Jumlah Cereal pada Supermarket berdasarkan Pabrik")
+plt.xlabel("Jumlah Cereal")
+plt.ylabel("Pabrik")
+bar_small=plt.barh(x_small,y_small,color='#444444')
+bar_high=plt.barh(x_high,y_high,color='#B2B2B2')
+plt.bar_label(bar_small)
+plt.bar_label(bar_high)
+
+
+#stacked bar chart
+df_stacked=df.groupby('mfr').mean().reset_index()
+df_stacked
+plt.figure(figsize=(8,8))
+plt.title("Perbandingan mfr terhadap nilai Fat dan Protein")
+plt.xlabel("Pabrik")
+plt.ylabel("Nilai Kandungan")
+protein=plt.bar(df_stacked['mfr'],df_stacked['protein'],label='protein',color='#81C6E8')
+fat=plt.bar(df_stacked['mfr'],df_stacked['fat'],label='fat',color='#00ABB3')
+plt.legend()
+plt.bar_label(protein)
+plt.bar_label(fat)
+
+#Scatterplot
+heigth=[160,150,155,168,170,172,173]
+weigth=[50,55,60,45,62,63,70]
+
+plt.figure(figsize=(4,4))
+plt.scatter(heigth,weigth)
+
+plt.scatter(df['potass'],df['rating'])
+
+#LinePlot
+minutes=[1,2,3,4,5,6,7,8,9,10]
+player1=[1,2,3,4,5,6,7,8,9,10]
+player2=[1,1,1,2,2,2,3,3,3,4]
+plt.plot(minutes,player2)
+
+#Double Line Plot
+plt.plot(minutes,player1)
+plt.plot(minutes,player2)
+
+#Area Plot
+plt.fill_between(minutes,player1)
+
+#DOuble Area Plot
+plt.fill_between(minutes,player1)
+plt.fill_between(minutes,player2)
+
+
+
+
+
